@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Spot</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+    <h1>Welcome to Pizza Spot</h1>
+    <img th:src="@{/images/pizza-spot-home.jpg}">
+    <a th:href="@{/designer}" id="newPizza">Design your own pizza</a><br/>
+
+    <form method="POST" th:action="@{/logout}">
+        <input type="submit" value="Logout"/>
+    </form>
+</body>
+</html>

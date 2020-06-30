@@ -1,0 +1,31 @@
+package com.pizzaorder.business;
+
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor(force=true)
+@Entity
+public class Ingredient {
+
+    @Id
+    private final String id;
+    private final String name;
+
+    @Enumerated(EnumType.STRING)
+    private final Type type;
+
+    public   enum Type {
+        DOUGH, CHEESE, VEGGIES, SAUCE, SAUSAGE
+    }
+
+
+}
