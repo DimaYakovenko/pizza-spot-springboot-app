@@ -7,13 +7,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
+
+      /*  auth
                 .jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(
@@ -51,15 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "where name=?")
                 .authoritiesByUsernameQuery(
                         "select name, authority from Authorities " +
-                                "where name=?");
-//                .passwordEncoder(new StandardPasswordEncoder("bcrypt"));
-                /*.withDefaultSchema()
-                .withUser(User.withUsername("foo")
-                        .password(passwordEncoder().encode("bar"))
-                        .authorities("USER"))
-                .withUser("dima")
-                .password(passwordEncoder().encode("1234"))
-                .authorities("ADMIN", "USER");*/
+                                "where name=?");*/
+
+        auth
+                .jdbcAuthentication()
+                .dataSource(dataSource)
+                .withDefaultSchema()
+                .withUser("user")
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
+                .and()
+                .withUser("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN");
     }
 
     @Bean
@@ -71,21 +74,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity)
             throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/h2-console/**")
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/", "/h2-console/**")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
                 .and()
-                .formLogin();
-
-        httpSecurity.csrf()
-                .ignoringAntMatchers("/h2-console/**");
-        httpSecurity.headers()
-                .frameOptions()
-                .sameOrigin()
+                .formLogin()
+                .loginPage("/login.html")
+                .failureUrl("/login.html")
                 .and()
                 .logout()
                 .logoutSuccessUrl("/");
+
+        httpSecurity.csrf().disable();
+        httpSecurity.headers().frameOptions().disable();
     }
 
 }

@@ -49,6 +49,7 @@ alter table PizzaOrder_Pizzas
     add foreign key (pizza_id) references Pizza (id);
 
 
+/*
 -- create tables for jdbc authentication
 CREATE TABLE if not exists users
 (
@@ -66,4 +67,4 @@ CREATE TABLE if not exists authorities
 );
 
 CREATE UNIQUE INDEX ix_auth_username
-    on authorities (name, authority);
+    on authorities (name, authority);*/
