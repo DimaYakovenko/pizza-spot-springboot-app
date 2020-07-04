@@ -39,6 +39,7 @@ values ('PPRN', 'Pepperoni', 'SAUSAGE');
 insert into Ingredient (id, name, type)
 values ('SLM', 'Salami', 'SAUSAGE');
 
+/*
 -- User user/pass
 INSERT INTO users (name, password, enabled)
 values ('user',
@@ -46,4 +47,4 @@ values ('user',
         1);
 
 INSERT INTO authorities (name, authority)
-values ('user', 'ROLE_USER');
+values ('user', 'ROLE_USER');*/
